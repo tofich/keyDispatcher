@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{headerFragmentWithTitle :: headerFragmentWithTitle('Все сертификаты')}" />
+
+<body>
+
+<div th:replace="~{mainMenu :: mainMenu(pairkeys)}" />
+<div class="container-fluid mt-2 ">
+    <div class="col-11 mx-auto">
+    <h1>Запросы и сертификаты</h1>
+    </div>
+</div>
+<div>
+    <H2 th:if="${deleteStatus>0}"><span th:text="Запись успешно удалена"/></H2>
+</div>
+<div th:replace="~{pairkeysTableFragment :: pairkeysTableFragment}" />
+
+<div th:replace="~{footerFragment :: footerFragment}" />
+
+</body>
+</html>

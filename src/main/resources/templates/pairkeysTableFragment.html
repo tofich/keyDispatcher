@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="pairkeysTableFragment">
+    <div class="container-fluid mt-1">
+        <div class="col-11 mx-auto">
+        <table class="table table-hover">
+            <thead class="table-secondary">
+            <tr>
+                <th>ID</th>
+                <th>DNS-имя</th>
+                <th>Альтернативное имя</th>
+                <th>Ответственный администратор</th>
+                <th>Дата создания заявки</th>
+                <th>Тип сертификата</th>
+                <th>Комментарий</th>
+                <th>Имя каталога на сервере</th>
+                <th>Выпустить сертификат</th>
+                <th>Удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pairkeys : ${pairkeys}">
+                <td th:text="${pairkeys.getId()}"/>
+                <td th:text="${pairkeys.getDnsName()}"/>
+                <td th:text="${pairkeys.getSubjectAlternativeName()}"/>
+                <td th:text="${pairkeys.getAdminName()}"/>
+                <td th:text="${pairkeys.getCreate_at()}"/>
+                <td th:text="${pairkeys.getTypeCert()}"/>
+                <td th:text="${pairkeys.getComment()}"/>
+                <td th:text="${pairkeys.getPairkeysFolderName()}"/>
+                <td>
+                    <form method="post" th:action="@{'/pairkeys/createCert/' + ${pairkeys.id}}">
+                        <button class="btn btn-primary" th:text="'Выпустить сертификат'" type="submit"/>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" th:action="@{'/pairkeys/delete/' + ${pairkeys.id}}">
+                        <button class="btn btn-secondary" th:text="Удалить" type="submit"/>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+</html>

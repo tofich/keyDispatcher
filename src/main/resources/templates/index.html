@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{headerFragmentWithTitle :: headerFragmentWithTitle('Главная')}" />
+
+<body>
+
+<div th:replace="~{mainMenu :: mainMenu(index)}" />
+
+<h1>Test</h1>
+
+<div th:replace="~{footerFragment :: footerFragment}" />
+
+</body>
+</html>

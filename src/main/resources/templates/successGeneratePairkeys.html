@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{headerFragmentWithTitle :: headerFragmentWithTitle('Добавление сертификата')}"/>
+
+<body>
+
+<div th:replace="~{mainMenu :: mainMenu(index)}"/>
+
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <h2 class="p-2">
+                <span th:text="'Вы успешно создали CSR-запрос и приватный ключ!'" th:remove="tag"/>
+            </h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-2 p-2 bg-warning bg-gradient rounded">
+                            <p>
+                                ВНИМАНИЕ!
+                                Надежно сохраняйте свой Приватный-ключ в безопасном месте, ведь он не восстанавливается,
+                                и без него вы не сможете установить SSL-сертификат на свой сервер.
+                                Кроме того, приватный ключ позволяет расшифровать любую информацию,
+                                зашифрованную SSL-сертификатом, поэтому доступ к нему должен быть только у вас.
+                            </p>
+                        </div>
+                        <div class="mb-2">
+                            <label for="csrText" class="form-label">Certificate Signing Request (CSR):</label>
+                            <textarea type="text" rows="10" class="form-control" id="csrText" th:text="*{csrText}"/>
+                        </div>
+                        <div class="mb-2">
+                            <label for="privateText" class="form-label">Приватный ключ:</label>
+                            <textarea type="text" rows="10" class="form-control" id="privateText" th:text="*{privateText}"/>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footerFragment :: footerFragment}"/>
+
+</body>
+</html>

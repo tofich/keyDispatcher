@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{headerFragmentWithTitle :: headerFragmentWithTitle('Добавление сертификата')}"/>
+
+<body>
+
+<div th:replace="~{mainMenu :: mainMenu(addPairkeys)}"/>
+
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-11">
+            <h2>
+                <span th:text="'Сгенерировать CSR запрос на выдачу SSL-сертификата'" th:remove="tag"/>
+            </h2>
+            <form action="#" th:action="@{/pairkeys/add}" th:object="${pairkeys}" method="post">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('dnsName')}"
+                                 th:errors="*{dnsName}"/>
+                            <label for="dnsName" class="form-label">DNS-имя*</label>
+                            <input type="hidden" class="form-control" id="id" th:field="*{id}">
+                            <input type="text" class="form-control" id="dnsName" th:field="*{dnsName}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('subjectAlternativeName')}"
+                                 th:errors="*{subjectAlternativeName}"/>
+                            <label for="subjectAlternativeName" class="form-label">Альтернативное DNS-имя (перечисление
+                                через запятую)</label>
+                            <input type="text" class="form-control" id="subjectAlternativeName"
+                                   th:field="*{subjectAlternativeName}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
+                            <label for="email" class="form-label">Email*</label>
+                            <input type="text" class="form-control" id="email" th:field="*{email}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('adminName')}"
+                                 th:errors="*{adminName}"/>
+                            <label for="adminName" class="form-label">Ответственнный администратор (ФИО)*</label>
+                            <input type="text" class="form-control" id="adminName" th:field="*{adminName}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('typeCert')}"
+                                 th:errors="*{typeCert}"/>
+                            <label for="typeCert" class="form-label">Тип сертификата*</label>
+                            <select id="typeCert" class="form-control" th:field="*{typeCert}">
+                                <option value="SERVER">Серверный</option>
+                                <option value="CLIENT">Клиентский</option>
+                                <option value="ALL">Общий</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('comment')}"
+                                 th:errors="*{comment}"/>
+                            <label for="comment" class="form-label">Комментарий</label>
+                            <input type="text" class="form-control" id="comment" th:field="*{comment}">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('organisation')}"
+                                 th:errors="*{organisation}"/>
+                            <label for="organisation" class="form-label">Организация*</label>
+                            <input type="text" value="Kuban-kredit" class="form-control" id="organisation"
+                                   th:field="*{organisation}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('organisationUnit')}"
+                                 th:errors="*{organisationUnit}"/>
+                            <label for="organisationUnit" class="form-label">Отдел*</label>
+                            <input type="text" value="UZI" class="form-control" id="organisationUnit"
+                                   th:field="*{organisationUnit}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"/>
+                            <label for="city" class="form-label">Город*</label>
+                            <input type="text" value="Krasnodar" class="form-control" id="city" th:field="*{city}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('countryUnit')}"
+                                 th:errors="*{countryUnit}"/>
+                            <label for="countryUnit" class="form-label">Область/край*</label>
+                            <input type="text" class="form-control" id="countryUnit" th:field="*{countryUnit}">
+                        </div>
+                        <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('country')}"
+                                 th:errors="*{country}"/>
+                            <label for="country" class="form-label">Страна*</label>
+                            <input type="text" value="Russia" class="form-control" id="country" th:field="*{country}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary">Сгенерировать запрос и закрытый ключ</button>
+                    </div>
+                </div>
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footerFragment :: footerFragment}"/>
+
+</body>
+</html>
