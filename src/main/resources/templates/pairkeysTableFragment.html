@@ -15,6 +15,7 @@
                 <th>Тип сертификата</th>
                 <th>Комментарий</th>
                 <th>Имя каталога на сервере</th>
+                <th>Файлы</th>
                 <th>Выпустить сертификат</th>
                 <th>Удалить</th>
             </tr>
@@ -29,6 +30,21 @@
                 <td th:text="${pairkeys.getTypeCert()}"/>
                 <td th:text="${pairkeys.getComment()}"/>
                 <td th:text="${pairkeys.getPairkeysFolderName()}"/>
+                <td>
+                    <form method="post" th:action="@{'/getFile/'}">
+                        <input type="hidden" name="id" th:value="${pairkeys.getId}">
+                        <input type="hidden" name="filename" th:value="${#strings.toLowerCase(pairkeys.getTypeCert)} + '.csr'">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button class="btn btn-link" th:text="${#strings.toLowerCase(pairkeys.getTypeCert)} + '.csr'" type="submit"/>
+                    </form>
+                    <form method="post" th:action="@{'/getFile/'}">
+                        <input type="hidden" name="id" th:value="${pairkeys.getId}">
+                        <input type="hidden" name="filename" th:value="${#strings.toLowerCase(pairkeys.getTypeCert)} + '.key'">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button class="btn btn-link" th:text="${#strings.toLowerCase(pairkeys.getTypeCert)} + '.key'" type="submit"/>
+                    </form>
+
+                </td>
                 <td>
                     <form method="post" th:action="@{'/pairkeys/createCert/' + ${pairkeys.id}}">
                         <button class="btn btn-primary" th:text="'Выпустить сертификат'" type="submit"/>

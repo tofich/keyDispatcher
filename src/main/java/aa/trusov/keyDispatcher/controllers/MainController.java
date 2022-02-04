@@ -3,17 +3,23 @@ package aa.trusov.keyDispatcher.controllers;
 import aa.trusov.keyDispatcher.entities.Pairkeys;
 import aa.trusov.keyDispatcher.services.GeneratePairkeyService;
 import aa.trusov.keyDispatcher.services.PairkeysService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Controller
@@ -74,4 +80,24 @@ public class MainController {
         return "pairkeys";
     }
 
+    @GetMapping("/login")
+    public String login(Model model){
+        return "login";
+    }
+
+    @PostMapping("/getFile")
+    @ResponseBody
+    public void getFilePost(@ModelAttribute("id") String pairkeysId, @ModelAttribute("filename") String fileName, HttpServletResponse response) {
+            String pairkeysFolderName = pairkeysService.getPairkeysById(Long.parseLong(pairkeysId)).getPairkeysFolderName();
+            String fullFileName = pairkeysFolderName + "\\" + fileName;
+            try {
+                DefaultResourceLoader loader = new DefaultResourceLoader();
+                InputStream is = new FileInputStream(fullFileName);
+                IOUtils.copy(is, response.getOutputStream());
+                response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+                response.flushBuffer();
+            } catch (IOException ex) {
+                throw new RuntimeException("IOError writing file to output stream");
+            }
+    }
 }

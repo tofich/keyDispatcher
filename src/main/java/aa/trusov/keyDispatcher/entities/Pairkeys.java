@@ -12,7 +12,7 @@ public class Pairkeys {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Long id;
 
     @Length(message = "DNS-имя должно содержать более 1 символа",min = 1)
     @Pattern(regexp = "[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,9}", message = "DNS-имя должно содержать только латинские буквы и/или цифры")
@@ -40,11 +40,11 @@ public class Pairkeys {
     private LocalDate create_at;
     private LocalDate validity;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

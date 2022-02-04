@@ -41,4 +41,9 @@ public class PairkeysService {
         return pairkeys;
     }
 
+    public Pairkeys getPairkeysById(Long id){
+        Pairkeys pairkeys = pairkeysRepository.findById(id).orElse(null);
+        return pairkeys;
+    }
+
 }

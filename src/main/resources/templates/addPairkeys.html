@@ -40,7 +40,7 @@
                         <div class="mb-2">
                             <div class="alert alert-danger" th:if="${#fields.hasErrors('adminName')}"
                                  th:errors="*{adminName}"/>
-                            <label for="adminName" class="form-label">Ответственнный администратор (ФИО)*</label>
+                            <label for="adminName" class="form-label">Ответственнный администратор (ФИО, телефон)*</label>
                             <input type="text" class="form-control" id="adminName" th:field="*{adminName}">
                         </div>
                         <div class="mb-2">
