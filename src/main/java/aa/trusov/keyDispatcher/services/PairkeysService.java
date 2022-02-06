@@ -37,7 +37,12 @@ public class PairkeysService {
     }
 
     public List<Pairkeys> getAllPairkeys(){
-        List<Pairkeys> pairkeys = (List<Pairkeys>) pairkeysRepository.findAll();
+        List<Pairkeys> pairkeys = (List<Pairkeys>) pairkeysRepository.findAllByOrderByIdDesc();
+        return pairkeys;
+    }
+
+    public List<Pairkeys> getWaitPairkeys(){
+        List<Pairkeys> pairkeys = (List<Pairkeys>) pairkeysRepository.findAllByValidityIsNull();
         return pairkeys;
     }
 

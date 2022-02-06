@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -23,19 +24,27 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     DataSource dataSource;
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
 /*    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }*/
 
-    // Enable jdbc authentication
-    //@Autowired
-/*    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder());
-    }*/
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery("select username, password, active from users where username = ?")
+                .authoritiesByUsernameQuery("select users.username, user_role.roles from users inner join user_role on users.id = user_role.user_id where users.username = ?")
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());
+    //.passwordEncoder(passwordEncoder());
+    }
 
     /*@Bean
     public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
@@ -44,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return jdbcUserDetailsManager;
     }*/
 
-    @Bean
+/*    @Bean
     @Override
     public UserDetailsService userDetailsService(){
         UserDetails user =
@@ -54,20 +63,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .roles("ADMIN")
                         .build();
         return new InMemoryUserDetailsManager(user);
-    }
+    }*/
 
 /*    @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/resources/**");
     }*/
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/addPairkeys").hasAnyRole("USER", "ADMIN")
-                    .antMatchers("/waitPairkeys").hasAnyRole("ADMIN")
-                    .antMatchers("/pairkeys").hasAnyRole("ADMIN")
+                    .antMatchers("/registration").permitAll()
+                    //.antMatchers("/*").hasAnyRole("USER", "ADMIN")
+                    //.antMatchers("/pairkeys/*").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

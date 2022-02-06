@@ -15,8 +15,8 @@
                 <th>Тип сертификата</th>
                 <th>Комментарий</th>
                 <th>Имя каталога на сервере</th>
-                <th>Файлы</th>
-                <th>Выпустить сертификат</th>
+                <th>Запрос</th>
+                <th>Сертификат</th>
                 <th>Удалить</th>
             </tr>
             </thead>
@@ -47,7 +47,7 @@
                 </td>
                 <td>
                     <form method="post" th:action="@{'/pairkeys/createCert/' + ${pairkeys.id}}">
-                        <button class="btn btn-primary" th:text="'Выпустить сертификат'" type="submit"/>
+                        <button class="btn btn-primary" th:text="'Выпустить'" type="submit"/>
                     </form>
                 </td>
                 <td>

@@ -6,21 +6,17 @@ import aa.trusov.keyDispatcher.services.PairkeysService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+
 
 @Controller
 public class MainController {
@@ -80,9 +76,10 @@ public class MainController {
         return "pairkeys";
     }
 
-    @GetMapping("/login")
-    public String login(Model model){
-        return "login";
+    @GetMapping("/waitPairkeys")
+    public String showWaitPairkeys(Model model){
+        model.addAttribute("pairkeys", pairkeysService.getWaitPairkeys());
+        return "waitPairkeys";
     }
 
     @PostMapping("/getFile")
@@ -91,7 +88,6 @@ public class MainController {
             String pairkeysFolderName = pairkeysService.getPairkeysById(Long.parseLong(pairkeysId)).getPairkeysFolderName();
             String fullFileName = pairkeysFolderName + "\\" + fileName;
             try {
-                DefaultResourceLoader loader = new DefaultResourceLoader();
                 InputStream is = new FileInputStream(fullFileName);
                 IOUtils.copy(is, response.getOutputStream());
                 response.setHeader("Content-Disposition", "attachment; filename=" + fileName);

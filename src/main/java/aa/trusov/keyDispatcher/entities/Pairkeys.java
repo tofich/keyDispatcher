@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class Pairkeys {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     @Length(message = "DNS-имя должно содержать более 1 символа",min = 1)

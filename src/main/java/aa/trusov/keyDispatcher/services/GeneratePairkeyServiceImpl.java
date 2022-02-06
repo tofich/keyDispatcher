@@ -14,8 +14,13 @@ import java.util.List;
 public class GeneratePairkeyServiceImpl implements GeneratePairkeyService {
 
     private String getFolderName(Pairkeys p){
-        String folderName = LocalDate.now() + "_" + DateTimeFormatter.ofPattern("HH-mm").format(LocalTime.now()) + "_" + p.getDnsName();
+        String folderName = "certs\\" + LocalDate.now() + "_" + DateTimeFormatter.ofPattern("HH-mm-ss").format(LocalTime.now()) + "_" + p.getDnsName();
         return folderName;
+    }
+
+    private String getBatFileName(Pairkeys p){
+        String batFileName = LocalDate.now() + "_" + DateTimeFormatter.ofPattern("HH-mm-ss").format(LocalTime.now()) + "_" + p.getDnsName() + ".bat";
+        return batFileName;
     }
 
     private String getFileNameWithoutFormat(Pairkeys p){
@@ -26,7 +31,7 @@ public class GeneratePairkeyServiceImpl implements GeneratePairkeyService {
     @Override
     public String generateCSRAndPrivateKeyAndGetFolderNameToPairkeyFiles(Pairkeys p) {
         String folderName = getFolderName(p);
-        String batFileName = folderName+".bat";
+        String batFileName = getBatFileName(p);
         String fileName = getFileNameWithoutFormat(p);
 
         try(FileWriter writer = new FileWriter(batFileName, false))

@@ -25,6 +25,9 @@
                     <li class="nav-item"><a class="nav-link" th:classappend="${activeTab == 'pairkeys' ? 'active' : ''}"
                         aria-current="page" th:href="@{/pairkeys}">Cертификаты</a></li>
 
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activeTab == 'users' ? 'active' : ''}"
+                                            aria-current="page" th:href="@{/users}">Пользователи</a></li>
+
                     <li class="nav-item">
                         <form th:action="@{/logout}" method="post">
                         <input class="btn btn-primary ms-3" type="submit" value="Выход"/>

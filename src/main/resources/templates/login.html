@@ -1,18 +1,36 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head></head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{headerFragmentWithTitle :: headerFragmentWithTitle('Авторизация')}" />
+
 <body>
-<div th:if="${param.error}">
-    Invalid username and password.
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-4 p-3">
+            <div class="p-3 border bg-light">
+                <div class="alert alert-danger" th:if="${param.error}">
+                    Неверные данные/учетная запись неактивна.
+                </div>
+                <div class="alert alert-success" th:if="${param.logout}">
+                    Вы вышли из системы.
+                </div>
+                <div class="alert alert-success" th:if="${successRegistration}">
+                    <span th:text="${successRegistration}" th:remove="tag"/>
+                </div>
+                <form th:action="@{/login}" method="post">
+                    <h3 class="mb-3">Авторизация</h3>
+                    <div class="row form-group pb-3 ms-2 me-2"><input class="form-control" type="text" name="username" placeholder="Логин"/></div>
+                    <div class="row form-group pb-3 ms-2 me-2"><input class="form-control" type="password" name="password" placeholder="Пароль"/></div>
+                    <div class="form-group pb-3 ms-4 me-4"><input class="btn btn-primary form-control" type="submit" value="Вход"/></div>
+                    <a th:href="'/registration'">Регистрация</a>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+
+<div th:replace="~{footerFragment :: footerFragment}" />
+
 </body>
 </html>

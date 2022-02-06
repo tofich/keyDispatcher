@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="usersTableFragment">
+    <div class="container-fluid mt-1">
+        <div class="col-11 mx-auto">
+            <table class="table table-hover">
+                <thead class="table-secondary">
+                <tr>
+                    <th>ID</th>
+                    <th>Логин</th>
+                    <th>Роли</th>
+                    <th>Статус</th>
+                    <th>Активировать</th>
+                    <th>Удалить</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="users : ${users}">
+                    <td th:text="${users.getId()}"/>
+                    <td th:text="${users.getUsername()}"/>
+
+                <td th:each="roles : ${users.getRoles()}">
+                    <span th:text="${roles}"/>
+                </td>
+                    <td>
+                        <span th:if="${users.isActive()==true}" th:text="'Активна'" th:remove="tag"/>
+                        <span th:if="${users.isActive} ==false" th:text="'Неактивна'" th:remove="tag"/>
+                    </td>
+                    <td>
+                        <form method="post" th:action="@{'/users/activate/' + ${users.getId()} + '/' + ${users.isActive}}">
+                            <button class="btn btn-danger" th:if="${users.isActive()==true}" th:text="'Деактивировать'" type="submit"/>
+                            <button class="btn btn-primary" th:if="${users.isActive()==false}" th:text="'Активировать'" type="submit"/>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" th:action="@{'/users/delete/' + ${users.getId()}}">
+                            <button class="btn btn-secondary" th:text="Удалить" type="submit"/>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>
