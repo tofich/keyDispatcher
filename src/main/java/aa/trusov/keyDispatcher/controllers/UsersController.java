@@ -4,6 +4,7 @@ import aa.trusov.keyDispatcher.entities.Role;
 import aa.trusov.keyDispatcher.entities.User;
 import aa.trusov.keyDispatcher.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,7 +64,7 @@ public class UsersController {
     }
 
     @GetMapping("/users")
-    public String showAllPairkeys(Model model) {
+    public String showAllUsers(Model model) {
         //model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("users", userService.getAllUsersWithoutPassword());
         return "users";
@@ -77,6 +78,12 @@ public class UsersController {
         }
         userService.changeUserActive(saveActive, id);
         model.addAttribute("success", true);
+        return "redirect:/users";
+    }
+
+    @DeleteMapping("/users/delete/{id}")
+    public String deleteUser(Model model, @PathVariable(required = true) Long id) {
+        userService.deleteById(id);
         return "redirect:/users";
     }
 

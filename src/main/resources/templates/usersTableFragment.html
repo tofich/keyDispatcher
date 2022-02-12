@@ -35,7 +35,8 @@
                     </td>
                     <td>
                         <form method="post" th:action="@{'/users/delete/' + ${users.getId()}}">
-                            <button class="btn btn-secondary" th:text="Удалить" type="submit"/>
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button class="btn btn-secondary" th:text="Удалить" onclick="return confirm('Вы уверены?')" type="submit"/>
                         </form>
                     </td>
                 </tr>

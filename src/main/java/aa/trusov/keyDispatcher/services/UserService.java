@@ -46,4 +46,9 @@ public class UserService {
         userRepository.changeUserActive(active, id);
     }
 
+    public void deleteById(Long id){
+        User user = userRepository.findById(id).orElseThrow();
+        userRepository.delete(user);
+    }
+
 }
