@@ -1,6 +1,7 @@
 package aa.trusov.keyDispatcher.services;
 
 import aa.trusov.keyDispatcher.entities.Pairkeys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -12,6 +13,9 @@ import java.util.List;
 
 @Component
 public class GeneratePairkeyServiceImpl implements GeneratePairkeyService {
+
+    @Value("${pathToOpenSslExe}")
+    private String pathToOpenSslExe="";
 
     private String getFolderName(Pairkeys p){
         String folderName = "certs\\" + LocalDate.now() + "_" + DateTimeFormatter.ofPattern("HH-mm-ss").format(LocalTime.now()) + "_" + p.getDnsName();
@@ -34,17 +38,21 @@ public class GeneratePairkeyServiceImpl implements GeneratePairkeyService {
         String batFileName = getBatFileName(p);
         String fileName = getFileNameWithoutFormat(p);
 
+
         try(FileWriter writer = new FileWriter(batFileName, false))
         {
             String createFolderCommand = "mkdir " + folderName + "\n";
             writer.write(createFolderCommand);
             writer.flush();
-            String generateCSRAndPrivateKeyCommand = "\"C:\\Program Files\\OpenSSL-Win64\\bin\\openssl.exe\" req " +
+
+            String generateCSRAndPrivateKeyCommand = "\"" + pathToOpenSslExe + "\\openssl.exe\" req " +
                     "-out \"" + folderName + "\\" + fileName + ".csr\" " +
                     "-new -newkey 2048 " +
                     "-nodes -keyout \"" + folderName + "\\" + fileName + ".key\" " +
                     "-config \"C:\\Program Files\\OpenSSL-Win64\\bin\\openssl.cfg\" " +
                     "-subj \"/C="+ p.getCountry() + "/ST='" + p.getCountryUnit() + "'/CN=" + p.getDnsName() + "/L=" + p.getCity() + "/subjectAltName='" + p.getSubjectAlternativeName() + "'/O='" + p.getOrganisation() + "'/OU='" + p.getOrganisationUnit() + "'/emailAddress=" + p.getEmail() + "\"";
+
+
             writer.write(generateCSRAndPrivateKeyCommand);
             writer.flush();
         }

@@ -1,6 +1,7 @@
 package aa.trusov.keyDispatcher.services;
 
 import aa.trusov.keyDispatcher.entities.Pairkeys;
+import aa.trusov.keyDispatcher.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import aa.trusov.keyDispatcher.repositories.PairkeysRepository;
@@ -49,6 +50,11 @@ public class PairkeysService {
     public Pairkeys getPairkeysById(Long id){
         Pairkeys pairkeys = pairkeysRepository.findById(id).orElse(null);
         return pairkeys;
+    }
+
+    public void deleteById(Long id){
+        Pairkeys pairkeys = pairkeysRepository.findById(id).orElseThrow();
+        pairkeysRepository.delete(pairkeys);
     }
 
 }

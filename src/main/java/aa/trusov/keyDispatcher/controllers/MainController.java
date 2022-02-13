@@ -11,11 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 
 @Controller
@@ -82,16 +82,27 @@ public class MainController {
         return "waitPairkeys";
     }
 
+    @DeleteMapping("/pairkeys/delete/{id}")
+    public String deletePairkeys(Model model, @PathVariable(required = true) Long id, HttpServletRequest request) {
+        pairkeysService.deleteById(id);
+        return "redirect:" + request.getHeader("referer");
+    }
+
     @PostMapping("/getFile")
     @ResponseBody
     public void getFilePost(@ModelAttribute("id") String pairkeysId, @ModelAttribute("filename") String fileName, HttpServletResponse response) {
             String pairkeysFolderName = pairkeysService.getPairkeysById(Long.parseLong(pairkeysId)).getPairkeysFolderName();
             String fullFileName = pairkeysFolderName + "\\" + fileName;
-            try {
-                InputStream is = new FileInputStream(fullFileName);
-                IOUtils.copy(is, response.getOutputStream());
-                response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-                response.flushBuffer();
+            try (InputStream is = new FileInputStream(fullFileName)){
+                File file = new File(fullFileName);
+                if (file.exists()){
+                    IOUtils.copy(is, response.getOutputStream());
+                    response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+                    response.flushBuffer();
+                }
+                else {
+                    System.out.println("Файл " + fullFileName + " не существует: ");
+                }
             } catch (IOException ex) {
                 throw new RuntimeException("IOError writing file to output stream");
             }
