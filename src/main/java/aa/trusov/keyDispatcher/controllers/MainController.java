@@ -1,21 +1,24 @@
 package aa.trusov.keyDispatcher.controllers;
 
 import aa.trusov.keyDispatcher.entities.Pairkeys;
+import aa.trusov.keyDispatcher.entities.ProfileOpenssl;
 import aa.trusov.keyDispatcher.services.GeneratePairkeyService;
 import aa.trusov.keyDispatcher.services.PairkeysService;
+import aa.trusov.keyDispatcher.services.ProfileOpensslService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.nio.file.Paths;
 
 
 @Controller
@@ -24,6 +27,13 @@ public class MainController {
     private PairkeysService pairkeysService;
 
     private GeneratePairkeyService generatePairkeyServiceImpl;
+
+    private ProfileOpensslService profileOpensslService;
+
+    @Autowired
+    public void setProfileOpenssl(ProfileOpensslService profileOpensslService) {
+        this.profileOpensslService = profileOpensslService;
+    }
 
     @Autowired
     public void setGeneratePairkeyServiceImpl(GeneratePairkeyService generatePairkeyServiceImpl) {
@@ -107,4 +117,35 @@ public class MainController {
                 throw new RuntimeException("IOError writing file to output stream");
             }
     }
+
+    @GetMapping("/profile/add")
+    public String addProfileOpenssl(Model model){
+        ProfileOpenssl profileOpenssl = new ProfileOpenssl();
+        model.addAttribute("profileOpenssl", profileOpenssl);
+        return "addProfileOpenssl";
+    }
+
+    @PostMapping("/profile/add")
+    public String addProfileOpenssl(@Valid @ModelAttribute("profileOpenssl") ProfileOpenssl profileOpenssl, BindingResult bindingResult,@RequestParam(name = "configFile", required = true) MultipartFile multipartFile, Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("profileOpenssl", profileOpenssl);
+            return "addProfileOpenssl";
+        }
+
+        String pathToSaveConfigFile = new File("").getAbsolutePath() + "/profiles/";
+        if(!new File(pathToSaveConfigFile).exists()){
+            new File(pathToSaveConfigFile).mkdir();
+        }
+
+        try {
+            multipartFile.transferTo(new File(pathToSaveConfigFile + multipartFile.getOriginalFilename()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        profileOpensslService.save(profileOpenssl, multipartFile.getOriginalFilename());
+        redirectAttributes.addFlashAttribute("successSaveFile", "Файл конфигурации успешно сохранен");
+        return "redirect:/";
+    }
+
 }

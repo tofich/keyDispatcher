@@ -11,7 +11,7 @@ public interface UserRepository extends PagingAndSortingRepository<User,Long> {
 
     public User findByUsername(String username);
 
-    @Query("SELECT u FROM UserWithoutPassword u")
+    @Query("SELECT u FROM UserWithoutPassword u JOIN FETCH u.roles ur")
     public List<UserWithoutPassword> findAllWithoutPassword();
 
     @Modifying

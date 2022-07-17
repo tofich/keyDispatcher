@@ -20,7 +20,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 
 import javax.sql.DataSource;
 
-@Configuration
+//@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -46,45 +46,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //.passwordEncoder(passwordEncoder());
     }
 
-    /*@Bean
-    public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
-        jdbcUserDetailsManager.setDataSource(dataSource);
-        return jdbcUserDetailsManager;
-    }*/
-
-/*    @Bean
-    @Override
-    public UserDetailsService userDetailsService(){
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("u")
-                        .password("u")
-                        .roles("ADMIN")
-                        .build();
-        return new InMemoryUserDetailsManager(user);
-    }*/
-
-/*    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**");
-    }*/
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                    .antMatchers("/admin/**").hasAuthority("ADMIN")
+                    //.antMatchers("/pairkeys").hasAnyAuthority("USER", "ADMIN")
                     .antMatchers("/registration").permitAll()
-                    //.antMatchers("/*").hasAnyRole("USER", "ADMIN")
-                    //.antMatchers("/pairkeys/*").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/login").permitAll()
                 .and()
                     .logout().permitAll();
-
         //http.csrf().disable();
     }
 

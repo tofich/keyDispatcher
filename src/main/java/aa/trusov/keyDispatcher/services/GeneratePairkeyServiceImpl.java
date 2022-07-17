@@ -14,30 +14,32 @@ import java.util.List;
 @Component
 public class GeneratePairkeyServiceImpl implements GeneratePairkeyService {
 
-    @Value("${pathToOpenSslExe}")
-    private String pathToOpenSslExe="";
+    @Value("${pathToOpenSslExe:C:\\Program Files\\OpenSSL-Win64\\bin}")
+    private String pathToOpenSslExe;
 
-    private String getFolderName(Pairkeys p){
+
+    private String generateFolderName(Pairkeys p){
         String folderName = "certs\\" + LocalDate.now() + "_" + DateTimeFormatter.ofPattern("HH-mm-ss").format(LocalTime.now()) + "_" + p.getDnsName();
         return folderName;
     }
 
-    private String getBatFileName(Pairkeys p){
+    private String generateBatFileName(Pairkeys p){
         String batFileName = LocalDate.now() + "_" + DateTimeFormatter.ofPattern("HH-mm-ss").format(LocalTime.now()) + "_" + p.getDnsName() + ".bat";
         return batFileName;
     }
 
-    private String getFileNameWithoutFormat(Pairkeys p){
+    private String generateFileNameWithoutFormat(Pairkeys p){
         String fileName = p.getTypeCert().toString().toLowerCase();
         return fileName;
     }
 
     @Override
     public String generateCSRAndPrivateKeyAndGetFolderNameToPairkeyFiles(Pairkeys p) {
-        String folderName = getFolderName(p);
-        String batFileName = getBatFileName(p);
-        String fileName = getFileNameWithoutFormat(p);
+        String folderName = generateFolderName(p);
+        String batFileName = generateBatFileName(p);
+        String fileName = generateFileNameWithoutFormat(p);
 
+        System.out.println("pathToOpenSslExe=" + pathToOpenSslExe);
 
         try(FileWriter writer = new FileWriter(batFileName, false))
         {
@@ -85,7 +87,7 @@ public class GeneratePairkeyServiceImpl implements GeneratePairkeyService {
     public String getCSR(Pairkeys p) {
         StringBuilder CSRtext = new StringBuilder();
         String ls = System.getProperty("line.separator");
-        try(BufferedReader reader = new BufferedReader( new FileReader (p.getPairkeysFolderName() + "\\" +getFileNameWithoutFormat(p) + ".csr"))){
+        try(BufferedReader reader = new BufferedReader( new FileReader (p.getPairkeysFolderName() + "\\" + generateFileNameWithoutFormat(p) + ".csr"))){
             String line;
             while( ( line = reader.readLine() ) != null ) {
                 CSRtext.append( line );
@@ -101,7 +103,7 @@ public class GeneratePairkeyServiceImpl implements GeneratePairkeyService {
     public String getPrivateKey(Pairkeys p) {
         StringBuilder privateText = new StringBuilder();
         String ls = System.getProperty("line.separator");
-        try(BufferedReader reader = new BufferedReader( new FileReader (p.getPairkeysFolderName() + "\\" + getFileNameWithoutFormat(p) + ".key"))){
+        try(BufferedReader reader = new BufferedReader( new FileReader (p.getPairkeysFolderName() + "\\" + generateFileNameWithoutFormat(p) + ".key"))){
             String line;
             while( ( line = reader.readLine() ) != null ) {
                 privateText.append( line );

@@ -40,6 +40,10 @@ public class Pairkeys {
     private LocalDate create_at;
     private LocalDate validity;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "profileOpenssl",referencedColumnName = "id")
+    private ProfileOpenssl profileOpenssl;
+
     public Long getId() {
         return id;
     }

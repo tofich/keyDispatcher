@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{headerFragmentWithTitle :: headerFragmentWithTitle('Добавление профиля OpenSSL')}"/>
+
+<body>
+
+<div th:replace="~{mainMenu :: mainMenu(addProfileOpenssl)}"/>
+
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <h2>
+                <span th:text="'Добавить профиль с конфигурацией OpenSSL'" th:remove="tag"/>
+            </h2>
+            <form action="#" th:action="@{/profile/add}" th:object="${profileOpenssl}" method="post" enctype="multipart/form-data">
+                <div class="row justify-content-center">
+                    <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('name')}"
+                                 th:errors="*{name}"/>
+                            <label for="name" class="form-label">Название профиля*</label>
+                            <input type="hidden" class="form-control" id="id" th:field="*{id}">
+                            <input type="text" class="form-control" id="name" th:field="*{name}">
+                    </div>
+                    <div class="mb-2">
+                        <label for="name" class="form-label">Прикрепите файл конфигурации*</label>
+                        <input type="file" class="form-control" id="configFile" name="configFile" accept=".cfg,.txt">
+                    </div>
+                    <div class="mb-2">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('description')}"
+                                 th:errors="*{description}"/>
+                            <label for="description" class="form-label">Описание</label>
+                            <textarea type="text" rows="10" class="form-control" id="description" th:field="*{description}"/>
+                    </div>
+                    <div class="col-4">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-primary">Сохранить профиль</button>
+                    </div>
+
+                </div>
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footerFragment :: footerFragment}"/>
+
+</body>
+</html>
