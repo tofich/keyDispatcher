@@ -7,6 +7,8 @@ import aa.trusov.keyDispatcher.services.PairkeysService;
 import aa.trusov.keyDispatcher.services.ProfileOpensslService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Paths;
+import java.security.Principal;
 
 
 @Controller
@@ -46,7 +49,8 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String showHomePage() {
+    public String showHomePage(Model model,@AuthenticationPrincipal OAuth2User user) {
+        model.addAttribute("name",user.getAttribute("login"));
         return "index";
     }
 

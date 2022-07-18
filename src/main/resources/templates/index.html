@@ -8,6 +8,7 @@
 <div th:replace="~{mainMenu :: mainMenu(index)}" />
 <div class="container-fluid">
 <h2 class="pt-3">Программа предназначена для геренации запроса, выпуска и учета SSL-сертификатов для узлов сети.</h2>
+    <h3 th:text="'Вы авторизовались под пользователем: ' + ${name}"></h3>
 </div>
 <div th:replace="~{footerFragment :: footerFragment}" />
 
